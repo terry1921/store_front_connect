@@ -18,8 +18,6 @@ import { UserNav } from "./user-nav";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/submit-blog", label: "Submit Blog" },
-  { href: "/topic-suggestion", label: "Topic Suggestions" },
 ];
 
 export function AppHeader() {
