@@ -47,7 +47,7 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card>
             <CardHeader>
                 <CardTitle>Submit a Blog Post</CardTitle>
@@ -67,6 +67,17 @@ export default function DashboardPage() {
             <CardFooter>
                 <Button asChild>
                     <Link href="/topic-suggestion">Generate Ideas</Link>
+                </Button>
+            </CardFooter>
+        </Card>
+         <Card>
+            <CardHeader>
+                <CardTitle>Upload a Product</CardTitle>
+                <CardDescription>Add new products to your store listing.</CardDescription>
+            </CardHeader>
+            <CardFooter>
+                <Button asChild>
+                    <Link href="/dashboard/products">Upload Product</Link>
                 </Button>
             </CardFooter>
         </Card>
