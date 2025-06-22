@@ -56,11 +56,19 @@ export default function LoginPage() {
       // On success, useEffect will redirect
     } catch (error: any) {
       console.error("Sign in failed", error);
-      toast({
-        variant: "destructive",
-        title: "Login Failed",
-        description: "Invalid email or password.",
-      });
+      if (error.message === "unverified-email") {
+        toast({
+          variant: "destructive",
+          title: "Email Not Verified",
+          description: "Please check your inbox and verify your email before logging in.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Login Failed",
+          description: "Invalid email or password.",
+        });
+      }
       setIsSigningIn(false);
     }
   };
@@ -192,10 +200,9 @@ export default function LoginPage() {
         <Image
           src="https://placehold.co/1024x768.png"
           alt="A modern storefront with artisanal products on display."
-          layout="fill"
-          objectFit="cover"
+          fill
           data-ai-hint="artisan storefront"
-          className="dark:brightness-[0.5]"
+          className="object-cover dark:brightness-[0.5]"
         />
       </div>
     </div>

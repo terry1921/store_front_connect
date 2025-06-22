@@ -65,7 +65,12 @@ export default function RegisterPage() {
     setIsSigningUp(true);
     try {
       await signUpWithEmail(data);
-      // On success, useEffect will redirect
+      // On success, useEffect will redirect to home page, as user is auto-signed in.
+      // A banner on home page will prompt for verification.
+      toast({
+        title: "Registration Successful!",
+        description: "A verification email has been sent. Please check your inbox.",
+      });
     } catch (error: any) {
       console.error("Sign up failed", error);
       toast({
@@ -247,10 +252,9 @@ export default function RegisterPage() {
         <Image
           src="https://placehold.co/1024x768.png"
           alt="A modern storefront with artisanal products on display."
-          layout="fill"
-          objectFit="cover"
+          fill
           data-ai-hint="artisan storefront"
-          className="dark:brightness-[0.5]"
+          className="object-cover dark:brightness-[0.5]"
         />
       </div>
     </div>

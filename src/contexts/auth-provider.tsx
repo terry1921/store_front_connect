@@ -10,6 +10,7 @@ import {
   signOut,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendEmailVerification,
 } from "firebase/auth";
 import { auth, rtdb } from "@/lib/firebase";
 import { ref, set, get } from "firebase/database";
@@ -25,6 +26,7 @@ interface AuthContextType {
     password: string;
   }) => Promise<void>;
   logout: () => Promise<void>;
+  resendVerificationEmail: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -77,7 +79,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     password: string;
   }) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      if (!userCredential.user.emailVerified) {
+        await signOut(auth);
+        throw new Error("unverified-email");
+      }
     } catch (error) {
       console.error("Error signing in with email", error);
       throw error;
@@ -100,6 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         password
       );
       await saveUserToDb(userCredential.user, name);
+      await sendEmailVerification(userCredential.user);
     } catch (error) {
       console.error("Error signing up with email", error);
       throw error;
@@ -114,6 +121,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const resendVerificationEmail = async () => {
+    if (auth.currentUser) {
+      try {
+        await sendEmailVerification(auth.currentUser);
+      } catch (error) {
+        console.error("Error resending verification email", error);
+        throw error;
+      }
+    } else {
+      throw new Error("No user is currently signed in.");
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -123,6 +143,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signInWithEmail,
         signUpWithEmail,
         logout,
+        resendVerificationEmail,
       }}
     >
       {children}
