@@ -11,9 +11,8 @@ export default function StoreProfile() {
           <Image
             src="https://placehold.co/1200x400.png"
             alt="Store banner"
-            layout="fill"
-            objectFit="cover"
-            className="rounded-t-lg"
+            fill
+            className="object-cover rounded-t-lg"
             data-ai-hint="store banner"
           />
         </div>
@@ -23,9 +22,8 @@ export default function StoreProfile() {
               <Image
                 src="https://placehold.co/200x200.png"
                 alt="Store profile"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-full"
+                fill
+                className="object-cover rounded-full"
                 data-ai-hint="store logo"
               />
             </div>
