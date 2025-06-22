@@ -36,6 +36,14 @@ export default function LoginPage() {
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [isGoogleSigningIn, setIsGoogleSigningIn] = useState(false);
 
+  const form = useForm<SignInFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
   useEffect(() => {
     if (user) {
       router.push("/dashboard");
