@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -19,7 +20,7 @@ export function AppFooter() {
           reserved.
         </p>
         <Button asChild variant="outline">
-          <Link href="/login">Admin Login</Link>
+          <Link href="/dashboard">Admin Login</Link>
         </Button>
       </div>
     </footer>

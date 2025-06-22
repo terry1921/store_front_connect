@@ -47,19 +47,9 @@ export default function RegisterPage() {
 
   useEffect(() => {
     if (user) {
-      router.push("/");
+      router.push("/dashboard");
     }
   }, [user, router]);
-
-  const form = useForm<SignUpFormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-  });
 
   const onSubmit = async (data: SignUpFormValues) => {
     setIsSigningUp(true);
