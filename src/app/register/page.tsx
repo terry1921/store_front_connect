@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -23,6 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z
   .object({
+    name: z.string().min(2, { message: "Name must be at least 2 characters." }),
     email: z.string().email({ message: "Please enter a valid email." }),
     password: z
       .string()
@@ -52,6 +54,7 @@ export default function RegisterPage() {
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -112,6 +115,23 @@ export default function RegisterPage() {
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="John Doe"
+                        {...field}
+                        disabled={isFormSubmitting}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="email"
