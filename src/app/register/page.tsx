@@ -21,19 +21,26 @@ import { Mountain, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 
-const formSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email." }),
-  password: z.string().min(1, { message: "Password is required." }),
-});
+const formSchema = z
+  .object({
+    email: z.string().email({ message: "Please enter a valid email." }),
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters long." }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match.",
+    path: ["confirmPassword"],
+  });
 
-type SignInFormValues = z.infer<typeof formSchema>;
+type SignUpFormValues = z.infer<typeof formSchema>;
 
-export default function LoginPage() {
-  const { user, loading, signInWithGoogle, signInWithEmail } = useAuth();
+export default function RegisterPage() {
+  const { user, loading, signUpWithEmail } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
-  const [isSigningIn, setIsSigningIn] = useState(false);
-  const [isGoogleSigningIn, setIsGoogleSigningIn] = useState(false);
+  const [isSigningUp, setIsSigningUp] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -41,47 +48,32 @@ export default function LoginPage() {
     }
   }, [user, router]);
 
-  const form = useForm<SignInFormValues>({
+  const form = useForm<SignUpFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  const onSubmit = async (data: SignInFormValues) => {
-    setIsSigningIn(true);
+  const onSubmit = async (data: SignUpFormValues) => {
+    setIsSigningUp(true);
     try {
-      await signInWithEmail(data);
+      await signUpWithEmail(data);
       // On success, useEffect will redirect
     } catch (error: any) {
-      console.error("Sign in failed", error);
+      console.error("Sign up failed", error);
       toast({
         variant: "destructive",
-        title: "Login Failed",
-        description: "Invalid email or password.",
+        title: "Sign Up Failed",
+        description: "Could not create an account. The email might already be in use.",
       });
-      setIsSigningIn(false);
+      setIsSigningUp(false);
     }
   };
-
-  const handleGoogleSignIn = async () => {
-    setIsGoogleSigningIn(true);
-    try {
-      await signInWithGoogle();
-      // On success, useEffect will redirect
-    } catch (error: any) {
-      console.error("Sign in with Google failed", error);
-      toast({
-        variant: "destructive",
-        title: "Login Failed",
-        description: "Could not sign in with Google. Please try again.",
-      });
-      setIsGoogleSigningIn(false);
-    }
-  };
-
-  const isFormSubmitting = isSigningIn || isGoogleSigningIn || loading;
+  
+  const isFormSubmitting = isSigningUp || loading;
 
   return (
     <div className="w-full lg:grid lg:min-h-[calc(100vh-8rem)] lg:grid-cols-2">
@@ -92,9 +84,9 @@ export default function LoginPage() {
               <Mountain className="h-6 w-6 text-primary" />
               <span className="">Terry1921 Store</span>
             </Link>
-            <h1 className="text-3xl font-bold">Login</h1>
+            <h1 className="text-3xl font-bold">Sign Up</h1>
             <p className="text-balance text-muted-foreground">
-              Enter your email below to login to your account
+              Create an account to get started
             </p>
           </div>
           <Form {...form}>
@@ -134,61 +126,42 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
+               <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="********"
+                        {...field}
+                        disabled={isFormSubmitting}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <Button type="submit" className="w-full" disabled={isFormSubmitting}>
-                {isSigningIn ? (
+                {isSigningUp ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
-                  "Login"
+                  "Create an account"
                 )}
               </Button>
             </form>
           </Form>
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
-              </span>
-            </div>
-          </div>
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={handleGoogleSignIn}
-            disabled={isFormSubmitting}
-          >
-            {isGoogleSigningIn ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <svg
-                className="mr-2 h-4 w-4"
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="fab"
-                data-icon="google"
-                role="img"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 488 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M488 261.8C488 403.3 381.5 512 244 512 111.8 512 0 398.2 0 256S111.8 0 244 0c69.8 0 130.8 28.5 173.4 74.5l-68.2 67.2C296.5 93.4 272.1 80 244 80 149.6 80 72 158.3 72 256s77.6 176 172 176c60.6 0 111-30.9 140.2-76.4h-140.2v-93.6H488v25.8z"
-                ></path>
-              </svg>
-            )}
-            Google
-          </Button>
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="underline">
-              Sign up
+            Already have an account?{" "}
+            <Link href="/login" className="underline">
+              Login
             </Link>
           </div>
         </div>
       </div>
-      <div className="hidden bg-muted lg:block relative">
+       <div className="hidden bg-muted lg:block relative">
         <Image
           src="https://placehold.co/1024x768.png"
           alt="A modern storefront with artisanal products on display."
