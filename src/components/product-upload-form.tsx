@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
-import { Loader2, Upload } from "lucide-react";
+import { Loader2, Upload, PlusCircle, XCircle } from "lucide-react";
 import { addProduct } from "@/lib/actions";
 import { LabelType } from "@/lib/types";
 
@@ -30,6 +30,11 @@ const formSchema = z.object({
   link: z.string().url({ message: "Please enter a valid URL." }),
   imageUrl: z.string().url({ message: "Please enter a valid image URL." }),
   label: labelTypeEnum,
+  bullets: z.array(
+    z.object({
+      value: z.string().min(1, { message: "Bullet point cannot be empty." }),
+    })
+  ).max(5, { message: "You can add a maximum of 5 bullet points." }),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -45,12 +50,24 @@ export default function ProductUploadForm() {
       link: "",
       imageUrl: "",
       label: LabelType.Sticker,
+      bullets: [],
     },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "bullets",
   });
 
   async function onSubmit(values: ProductFormValues) {
     setIsLoading(true);
-    const result = await addProduct(values);
+    
+    const productToSubmit = {
+      ...values,
+      bullets: values.bullets?.map((bullet) => bullet.value),
+    };
+
+    const result = await addProduct(productToSubmit);
     setIsLoading(false);
 
     if (result.success) {
@@ -148,6 +165,47 @@ export default function ProductUploadForm() {
                 </FormItem>
               )}
             />
+            
+            <div className="space-y-4">
+              <FormLabel>Product Bullet Points</FormLabel>
+              <FormDescription>
+                Add up to 5 key features or bullet points for your product.
+              </FormDescription>
+              {fields.map((field, index) => (
+                <FormField
+                  key={field.id}
+                  control={form.control}
+                  name={`bullets.${index}.value`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2">
+                        <FormControl>
+                          <Input {...field} placeholder={`Bullet point #${index + 1}`} />
+                        </FormControl>
+                        <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}>
+                          <XCircle className="h-5 w-5 text-destructive" />
+                          <span className="sr-only">Remove Bullet</span>
+                        </Button>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ))}
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="mt-2"
+                onClick={() => append({ value: "" })}
+                disabled={fields.length >= 5}
+              >
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Add Bullet Point
+              </Button>
+               {form.formState.errors.bullets && <p className="text-sm font-medium text-destructive">{form.formState.errors.bullets.message}</p>}
+            </div>
+
             <Button type="submit" disabled={isLoading} className="w-full">
               {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}
               Upload Product
