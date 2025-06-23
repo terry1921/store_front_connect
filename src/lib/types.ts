@@ -1,18 +1,11 @@
+import type { Timestamp } from "firebase/firestore";
+
 export interface BlogPost {
   id: number;
   title: string;
   excerpt: string;
   date: string;
   author: string;
-}
-
-export interface FeaturedProduct {
-  id: number;
-  name: string;
-  description: string;
-  imageUrl: string;
-  link: string;
-  imageHint: string;
 }
 
 export enum LabelType {
@@ -33,4 +26,6 @@ export interface Product {
   label: LabelType;
   imageUrl: string;
   bullets?: string[];
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
 }

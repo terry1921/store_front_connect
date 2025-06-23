@@ -3,7 +3,7 @@
 import { suggestBlogTopics } from '@/ai/flows/suggest-blog-topics';
 import { db } from '@/lib/firebase';
 import type { Product } from '@/lib/types';
-import { doc, runTransaction, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, runTransaction, setDoc, serverTimestamp, collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 
 export async function getBlogTopicSuggestions(storeFocus: string): Promise<{topics?: string[]; error?: string}> {
   try {
@@ -40,7 +40,7 @@ async function getNextProductId(): Promise<number> {
   }
 }
 
-export async function addProduct(productData: Omit<Product, 'id'>): Promise<{ success: boolean; error?: string }> {
+export async function addProduct(productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>): Promise<{ success: boolean; error?: string }> {
   try {
       const productId = await getNextProductId();
       const productRef = doc(db, 'products', productId.toString());
@@ -58,4 +58,20 @@ export async function addProduct(productData: Omit<Product, 'id'>): Promise<{ su
       const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred.';
       return { success: false, error: `Failed to add product: ${errorMessage}` };
   }
+}
+
+export async function getProducts(): Promise<Product[]> {
+    try {
+        const productsRef = collection(db, 'products');
+        const q = query(productsRef, orderBy('createdAt', 'desc'), limit(4));
+        const querySnapshot = await getDocs(q);
+        const products: Product[] = [];
+        querySnapshot.forEach((doc) => {
+            products.push(doc.data() as Product);
+        });
+        return products;
+    } catch (e) {
+        console.error("Failed to fetch products: ", e);
+        return [];
+    }
 }
