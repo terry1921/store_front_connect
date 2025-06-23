@@ -28,6 +28,7 @@ const labelTypeEnum = z.nativeEnum(LabelType);
 const formSchema = z.object({
   title: z.string().min(3, { message: "Title must be at least 3 characters long." }),
   link: z.string().url({ message: "Please enter a valid URL." }),
+  imageUrl: z.string().url({ message: "Please enter a valid image URL." }),
   label: labelTypeEnum,
 });
 
@@ -42,6 +43,7 @@ export default function ProductUploadForm() {
     defaultValues: {
       title: "",
       link: "",
+      imageUrl: "",
       label: LabelType.Sticker,
     },
   });
@@ -98,6 +100,22 @@ export default function ProductUploadForm() {
                   </FormControl>
                   <FormDescription>
                     The direct URL to the product page in your store.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="imageUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image URL</FormLabel>
+                  <FormControl>
+                    <Input placeholder="https://yourstore.com/image.png" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    The URL for the product's image.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

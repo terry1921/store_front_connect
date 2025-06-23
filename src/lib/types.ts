@@ -31,4 +31,5 @@ export interface Product {
   title: string;
   link: string;
   label: LabelType;
+  imageUrl: string;
 }
