@@ -72,7 +72,7 @@ export default async function FeaturedShowcase() {
                 )}
               </CardContent>
               <CardFooter>
-                <Button asChild className="w-full" style={{ backgroundColor: 'hsl(var(--accent))', color: 'hsl(var(--accent-foreground))' }}>
+                <Button asChild className="w-full bg-accent text-accent-foreground">
                   <a href={product.link}>View Product</a>
                 </Button>
               </CardFooter>
