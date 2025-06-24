@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import {
   Card,
@@ -40,7 +41,7 @@ export default async function FeaturedShowcase() {
                   src={product.imageUrl}
                   alt={product.title}
                   fill={true}
-                  className="object-contain"
+                  className="object-contain p-2"
                   data-ai-hint={getAiHint(product.title)}
                 />
               </div>
@@ -48,9 +49,17 @@ export default async function FeaturedShowcase() {
                 <CardTitle>{product.title}</CardTitle>
               </CardHeader>
               <CardContent className="flex-grow">
-                <p className="text-sm text-muted-foreground">
-                  {product.bullets?.[0] || "A high-quality, handcrafted item."}
-                </p>
+                {product.bullets && product.bullets.length > 0 ? (
+                  <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                    {product.bullets.map((bullet, index) => (
+                      <li key={index}>{bullet}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    A high-quality, handcrafted item.
+                  </p>
+                )}
               </CardContent>
               <CardFooter>
                 <Button asChild className="w-full" style={{ backgroundColor: 'hsl(var(--accent))', color: 'hsl(var(--accent-foreground))' }}>
