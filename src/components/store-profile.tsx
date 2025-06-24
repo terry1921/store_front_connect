@@ -20,7 +20,7 @@ export default function StoreProfile() {
           <div className="absolute -top-16 left-6">
             <div className="relative h-32 w-32 rounded-full border-4 border-card bg-card">
               <Image
-                src="https://storage.googleapis.com/st-builder-project-prod-source-mesher/prj-349f9d27-64d8-466f-b883-9b972848d7d8/5.5/prompts/i-0_1750722880080.png"
+                src="https://placehold.co/200x200.png"
                 alt="Store profile"
                 fill
                 className="object-cover rounded-full"
