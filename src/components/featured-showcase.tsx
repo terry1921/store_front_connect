@@ -1,5 +1,6 @@
 
 import Image from "next/image";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -13,7 +14,10 @@ import { getProducts } from "@/lib/actions";
 import { Badge } from "@/components/ui/badge";
 
 export default async function FeaturedShowcase() {
-  const featuredProducts: Product[] = await getProducts();
+  const products = await getProducts(5);
+
+  const hasMoreProducts = products.length > 4;
+  const featuredProducts = hasMoreProducts ? products.slice(0, 4) : products;
 
   const getAiHint = (title: string) => {
     return title.split(' ').slice(0, 2).join(' ');
@@ -79,6 +83,13 @@ export default async function FeaturedShowcase() {
         <p className="mt-8 text-center text-muted-foreground">
           No featured products to display at the moment. Check back soon!
         </p>
+      )}
+       {hasMoreProducts && (
+        <div className="mt-8 text-center">
+          <Button asChild>
+            <Link href="/products">View More Products</Link>
+          </Button>
+        </div>
       )}
     </section>
   );

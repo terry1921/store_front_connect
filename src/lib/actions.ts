@@ -60,15 +60,23 @@ export async function addProduct(productData: Omit<Product, 'id' | 'createdAt' |
   }
 }
 
-export async function getProducts(): Promise<Product[]> {
+export async function getProducts(limitCount?: number): Promise<Product[]> {
     try {
         const productsRef = collection(db, 'products');
-        const q = query(productsRef, orderBy('createdAt', 'desc'), limit(4));
+        
+        const queryConstraints = [orderBy('createdAt', 'desc')];
+        if (limitCount) {
+            queryConstraints.push(limit(limitCount));
+        }
+        
+        const q = query(productsRef, ...queryConstraints);
         const querySnapshot = await getDocs(q);
+        
         const products: Product[] = [];
         querySnapshot.forEach((doc) => {
             products.push(doc.data() as Product);
         });
+        
         return products;
     } catch (e) {
         console.error("Failed to fetch products: ", e);
