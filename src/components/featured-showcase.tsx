@@ -2,7 +2,6 @@ import Image from "next/image";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -40,8 +39,8 @@ export default async function FeaturedShowcase() {
                 <Image
                   src={product.imageUrl}
                   alt={product.title}
-                  fill
-                  className="object-cover"
+                  fill={true}
+                  className="object-contain"
                   data-ai-hint={getAiHint(product.title)}
                 />
               </div>
