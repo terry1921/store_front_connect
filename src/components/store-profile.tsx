@@ -20,11 +20,10 @@ export default function StoreProfile() {
           <div className="absolute -top-16 left-6">
             <div className="relative h-32 w-32 rounded-full border-4 border-card bg-card">
               <Image
-                src="https://placehold.co/200x200.png"
-                alt="Store profile"
+                src="/assets/images/profile_store.png"
+                alt="Terry1921 Store profile image"
                 fill
                 className="object-cover rounded-full"
-                data-ai-hint="anime portrait"
               />
             </div>
           </div>
