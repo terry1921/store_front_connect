@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/lib/types";
 import { getProducts } from "@/lib/actions";
+import { Badge } from "@/components/ui/badge";
 
 export default async function FeaturedShowcase() {
   const featuredProducts: Product[] = await getProducts();
@@ -47,6 +48,11 @@ export default async function FeaturedShowcase() {
               </div>
               <CardHeader>
                 <CardTitle>{product.title}</CardTitle>
+                {product.label && (
+                  <Badge variant="secondary" className="w-fit">
+                    {product.label}
+                  </Badge>
+                )}
               </CardHeader>
               <CardContent className="flex-grow">
                 {product.bullets && product.bullets.length > 0 ? (
