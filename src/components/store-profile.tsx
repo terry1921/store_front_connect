@@ -9,7 +9,7 @@ export default function StoreProfile() {
       <Card className="overflow-hidden">
         <div className="relative h-48 w-full bg-muted">
           <Image
-            src="https://placehold.co/1200x400.png"
+            src="/assets/images/banner_store.png"
             alt="Store banner"
             fill
             className="object-cover rounded-t-lg"
