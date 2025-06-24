@@ -4,10 +4,10 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
-import TopicSuggestionForm from "@/components/topic-suggestion-form";
 import { Loader2 } from "lucide-react";
+import ProductUploadForm from "@/components/product-upload-form";
 
-export default function TopicSuggestionPage() {
+export default function UploadProductPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
@@ -29,14 +29,14 @@ export default function TopicSuggestionPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-4xl font-bold text-center font-headline">
-          Generate Blog Ideas
+          Upload a New Product
         </h1>
         <p className="mt-2 text-center text-muted-foreground">
-          Stuck on what to write about? Use our AI-powered tool to generate
-          creative blog topic ideas based on your store's focus.
+          Fill out the form below to add a new product to your catalog.
+          The product ID will be generated automatically.
         </p>
         <div className="mt-8">
-          <TopicSuggestionForm />
+          <ProductUploadForm />
         </div>
       </div>
     </div>

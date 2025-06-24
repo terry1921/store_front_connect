@@ -45,12 +45,6 @@ export default function RegisterPage() {
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [isGoogleSigningUp, setIsGoogleSigningUp] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      router.push("/");
-    }
-  }, [user, router]);
-
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -60,6 +54,12 @@ export default function RegisterPage() {
       confirmPassword: "",
     },
   });
+
+  useEffect(() => {
+    if (user) {
+      router.push("/dashboard");
+    }
+  }, [user, router]);
 
   const onSubmit = async (data: SignUpFormValues) => {
     setIsSigningUp(true);
