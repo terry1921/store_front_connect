@@ -29,11 +29,11 @@ export default function UploadProductPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-4xl font-bold text-center font-headline">
-          Upload a New Product
+          Subir un nuevo producto
         </h1>
         <p className="mt-2 text-center text-muted-foreground">
-          Fill out the form below to add a new product to your catalog.
-          The product ID will be generated automatically.
+          Completa el formulario a continuación para añadir un nuevo producto a tu catálogo. 
+          El ID del producto se generará automáticamente.
         </p>
         <div className="mt-8">
           <ProductUploadForm />

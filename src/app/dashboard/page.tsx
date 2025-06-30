@@ -39,45 +39,45 @@ export default function DashboardPage() {
       </div>
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>Welcome, {user.displayName || user.email}!</CardTitle>
-          <CardDescription>This is your personal dashboard. What would you like to do today?</CardDescription>
+          <CardTitle>Bienvenido, {user.displayName || user.email}!</CardTitle>
+          <CardDescription>Este es tu panel personal. ¿Qué te gustaría hacer hoy?</CardDescription>
         </CardHeader>
         <CardContent>
-          <p>You have successfully logged in.</p>
+          <p>Has iniciado sesión exitosamente.</p>
         </CardContent>
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card>
             <CardHeader>
-                <CardTitle>Submit a Blog Post</CardTitle>
-                <CardDescription>Have a story to share? Submit your blog post for our team to review.</CardDescription>
+                <CardTitle>Enviar una publicación de blog</CardTitle>
+                <CardDescription>¿Tienes una historia que compartir? Envía tu entrada de blog para que nuestro equipo la revise.</CardDescription>
             </CardHeader>
             <CardFooter>
                 <Button asChild>
-                    <Link href="/submit-blog">Get Started</Link>
+                    <Link href="/submit-blog">Empezar</Link>
                 </Button>
             </CardFooter>
         </Card>
         <Card>
             <CardHeader>
-                <CardTitle>Get Topic Suggestions</CardTitle>
-                <CardDescription>Need inspiration? Use our AI tool to generate creative blog topic ideas.</CardDescription>
+                <CardTitle>Obtenga sugerencias de temas</CardTitle>
+                <CardDescription>¿Necesitas inspiración? Usa nuestra herramienta de IA para generar ideas creativas para tu blog.</CardDescription>
             </CardHeader>
             <CardFooter>
                 <Button asChild>
-                    <Link href="/topic-suggestion">Generate Ideas</Link>
+                    <Link href="/topic-suggestion">Generar Ideas</Link>
                 </Button>
             </CardFooter>
         </Card>
          <Card>
             <CardHeader>
-                <CardTitle>Upload a Product</CardTitle>
-                <CardDescription>Add new products to your store listing.</CardDescription>
+                <CardTitle>Subir un producto</CardTitle>
+                <CardDescription>Añade nuevos productos al listado de tu tienda.</CardDescription>
             </CardHeader>
             <CardFooter>
                 <Button asChild>
-                    <Link href="/dashboard/products">Upload Product</Link>
+                    <Link href="/dashboard/products">Subir Producto</Link>
                 </Button>
             </CardFooter>
         </Card>

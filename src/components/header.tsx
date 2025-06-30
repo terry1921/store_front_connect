@@ -3,7 +3,6 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   Menu,
   Mountain,
@@ -11,17 +10,10 @@ import {
   Facebook,
   Instagram,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { UserNav } from "./user-nav";
 
-const navLinks = [
-  { href: "/", label: "Hme" },
-];
-
 export function AppHeader() {
-  const pathname = usePathname();
   const { user } = useAuth();
 
   return (
