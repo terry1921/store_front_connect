@@ -19,9 +19,7 @@ export function AppFooter() {
           © {year} Terry1921 Store Front Connect. All rights
           reserved.
         </p>
-        <Button asChild variant="outline">
-          <Link href="/dashboard">Admin Login</Link>
-        </Button>
+        <Link href="/dashboard">Admin Login</Link>
       </div>
     </footer>
   );

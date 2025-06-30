@@ -26,15 +26,15 @@ import { LabelType } from "@/lib/types";
 const labelTypeEnum = z.nativeEnum(LabelType);
 
 const formSchema = z.object({
-  title: z.string().min(3, { message: "Title must be at least 3 characters long." }),
-  link: z.string().url({ message: "Please enter a valid URL." }),
-  imageUrl: z.string().url({ message: "Please enter a valid image URL." }),
+  title: z.string().min(3, { message: "El título debe tener al menos 3 caracteres." }),
+  link: z.string().url({ message: "Introduzca una URL válida." }),
+  imageUrl: z.string().url({ message: "Introduzca una URL de imagen válida." }),
   label: labelTypeEnum,
   bullets: z.array(
     z.object({
-      value: z.string().min(1, { message: "Bullet point cannot be empty." }),
+      value: z.string().min(1, { message: "La viñeta no puede estar vacía." }),
     })
-  ).max(5, { message: "You can add a maximum of 5 bullet points." }),
+  ).max(5, { message: "Puedes agregar un máximo de 5 viñetas." }),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -72,15 +72,15 @@ export default function ProductUploadForm() {
 
     if (result.success) {
       toast({
-        title: "Product Uploaded!",
-        description: "Your new product has been added successfully.",
+        title: "¡Producto subido!",
+        description: "Su nuevo producto ha sido añadido exitosamente.",
       });
       form.reset();
     } else {
       toast({
         variant: "destructive",
-        title: "Upload Failed",
-        description: result.error || "An unexpected error occurred.",
+        title: "Fallo de carga",
+        description: result.error || "Se produjo un error inesperado.",
       });
     }
   }
@@ -95,12 +95,12 @@ export default function ProductUploadForm() {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Product Title</FormLabel>
+                  <FormLabel>Título del producto</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Cool Astronaut Sticker" {...field} />
+                    <Input placeholder="p. ej., Sticker de astronauta genial" {...field} />
                   </FormControl>
                   <FormDescription>
-                    The public name of your product.
+                  El nombre público de su producto.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -111,12 +111,12 @@ export default function ProductUploadForm() {
               name="link"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Store Link</FormLabel>
+                  <FormLabel>Enlace de la tienda</FormLabel>
                   <FormControl>
                     <Input placeholder="https://yourstore.com/product/..." {...field} />
                   </FormControl>
                   <FormDescription>
-                    The direct URL to the product page in your store.
+                    La URL directa a la página del producto en su tienda.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -127,12 +127,12 @@ export default function ProductUploadForm() {
               name="imageUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Image URL</FormLabel>
+                  <FormLabel>URL de la imagen</FormLabel>
                   <FormControl>
                     <Input placeholder="https://yourstore.com/image.png" {...field} />
                   </FormControl>
                   <FormDescription>
-                    The URL for the product's image.
+                    La URL de la imagen del producto.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -143,11 +143,11 @@ export default function ProductUploadForm() {
               name="label"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Label Type</FormLabel>
+                  <FormLabel>Tipo de etiqueta</FormLabel>
                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a label type" />
+                        <SelectValue placeholder="Seleccione un tipo de etiqueta" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -159,7 +159,7 @@ export default function ProductUploadForm() {
                     </SelectContent>
                   </Select>
                   <FormDescription>
-                    Choose the category that best fits your product.
+                    Elige la categoría que mejor se adapte a tu producto.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -167,9 +167,9 @@ export default function ProductUploadForm() {
             />
             
             <div className="space-y-4">
-              <FormLabel>Product Bullet Points</FormLabel>
+              <FormLabel>Viñetas del producto</FormLabel>
               <FormDescription>
-                Add up to 5 key features or bullet points for your product.
+                Agregue hasta 5 características clave o viñetas para su producto.
               </FormDescription>
               {fields.map((field, index) => (
                 <FormField
@@ -180,11 +180,11 @@ export default function ProductUploadForm() {
                     <FormItem>
                       <div className="flex items-center gap-2">
                         <FormControl>
-                          <Input {...field} placeholder={`Bullet point #${index + 1}`} />
+                          <Input {...field} placeholder={`Viñeta #${index + 1}`} />
                         </FormControl>
                         <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}>
                           <XCircle className="h-5 w-5 text-destructive" />
-                          <span className="sr-only">Remove Bullet</span>
+                          <span className="sr-only">Quitar Viñeta</span>
                         </Button>
                       </div>
                       <FormMessage />
@@ -201,14 +201,14 @@ export default function ProductUploadForm() {
                 disabled={fields.length >= 5}
               >
                 <PlusCircle className="mr-2 h-4 w-4" />
-                Add Bullet Point
+                Agregar viñeta
               </Button>
                {form.formState.errors.bullets && <p className="text-sm font-medium text-destructive">{form.formState.errors.bullets.message}</p>}
             </div>
 
             <Button type="submit" disabled={isLoading} className="w-full">
               {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}
-              Upload Product
+              Subir producto
             </Button>
           </form>
         </Form>

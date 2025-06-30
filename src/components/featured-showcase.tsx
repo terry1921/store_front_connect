@@ -31,11 +31,11 @@ export default async function FeaturedShowcase() {
         id="featured-showcase-heading"
         className="text-3xl font-bold text-center font-headline"
       >
-        Featured Showcase
+        Presentación De Productos
       </h2>
       <p className="mt-2 text-center text-muted-foreground max-w-2xl mx-auto">
-        Discover our handpicked selection of top-quality products. Each item is
-        chosen for its craftsmanship and unique character.
+        Descubra nuestra cuidada selección de productos de primera calidad. 
+        Cada artículo se elige por su artesanía y su carácter único.
       </p>
       {validProducts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
@@ -53,7 +53,7 @@ export default async function FeaturedShowcase() {
               <CardHeader>
                 <CardTitle>{product.title}</CardTitle>
                 {product.label && (
-                  <Badge variant="secondary" className="w-fit">
+                  <Badge variant="default" className="w-fit">
                     {product.label}
                   </Badge>
                 )}
@@ -67,13 +67,13 @@ export default async function FeaturedShowcase() {
                   </ul>
                 ) : (
                   <p className="text-sm text-muted-foreground">
-                    A high-quality, handcrafted item.
+                    Un artículo de alta calidad hecho a mano.
                   </p>
                 )}
               </CardContent>
               <CardFooter>
-                <Button asChild className="w-full" style={{ backgroundColor: 'hsl(var(--accent))', color: 'hsl(var(--accent-foreground))' }}>
-                  <a href={product.link}>View Product</a>
+                <Button asChild className="w-full bg-accent text-accent-foreground">
+                  <a href={product.link}>Ver producto</a>
                 </Button>
               </CardFooter>
             </Card>
@@ -81,13 +81,13 @@ export default async function FeaturedShowcase() {
         </div>
       ) : (
         <p className="mt-8 text-center text-muted-foreground">
-          No featured products to display at the moment. Check back soon!
+          No hay productos destacados para mostrar en este momento. ¡Vuelve pronto!
         </p>
       )}
        {hasMoreProducts && (
         <div className="mt-8 text-center">
           <Button asChild>
-            <Link href="/products">View More Products</Link>
+            <Link href="/products">Ver más productos</Link>
           </Button>
         </div>
       )}
