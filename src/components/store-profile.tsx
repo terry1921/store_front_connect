@@ -39,7 +39,7 @@ export default function StoreProfile() {
               </p>
             </div>
             <div className="space-y-3 text-sm">
-              <h2 className="font-semibold text-base">Contactanos</h2>
+              <h2 className="font-semibold text-base">Contáctanos</h2>
               <div className="flex items-center gap-3 text-muted-foreground">
                 <MapPin className="h-4 w-4 flex-shrink-0" />
                 <span>Sin dirección fisica</span>
