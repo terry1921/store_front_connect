@@ -10,6 +10,8 @@ export default function StoreProfile() {
         <div className="relative h-48 w-full bg-muted">
           <Image
             src="/assets/images/banner_store.png"
+            priority={false}
+            loading="lazy"
             alt="Store banner"
             fill
             className="object-cover rounded-t-lg"
@@ -21,6 +23,8 @@ export default function StoreProfile() {
             <div className="relative h-32 w-32 rounded-full border-4 border-card bg-card">
               <Image
                 src="/assets/images/profile_store.png"
+                priority={false}
+                loading="lazy"
                 alt="Terry1921 Store profile image"
                 fill
                 className="object-cover rounded-full"
