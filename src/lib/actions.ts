@@ -3,7 +3,7 @@
 import { suggestBlogTopics } from '@/ai/flows/suggest-blog-topics';
 import { db } from '@/lib/firebase';
 import type { Product } from '@/lib/types';
-import { doc, runTransaction, setDoc, serverTimestamp, collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { doc, runTransaction, setDoc, serverTimestamp, collection, getDocs, query, orderBy, limit, type QueryConstraint } from 'firebase/firestore';
 
 export async function getBlogTopicSuggestions(storeFocus: string): Promise<{topics?: string[]; error?: string}> {
   try {
@@ -64,7 +64,7 @@ export async function getProducts(limitCount?: number): Promise<Product[]> {
     try {
         const productsRef = collection(db, 'products');
         
-        const queryConstraints = [orderBy('createdAt', 'desc')];
+        const queryConstraints: QueryConstraint[] = [orderBy('createdAt', 'desc')];
         if (limitCount) {
             queryConstraints.push(limit(limitCount));
         }
