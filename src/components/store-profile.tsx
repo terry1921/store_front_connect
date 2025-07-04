@@ -57,7 +57,7 @@ export default function StoreProfile() {
                 <span>terryrockstar22@gmail.com</span>
               </div>
               <Button className="w-full mt-2" variant="outline" asChild>
-                <a target="_blank" href="https://www.stickermule.com/terry1921">Visita nuestra tienda</a>
+                <a target="_blank" href="https://www.stickermule.com/mx/terry1921">Visita nuestra tienda</a>
               </Button>
             </div>
           </div>
