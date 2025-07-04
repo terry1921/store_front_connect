@@ -9,11 +9,12 @@ export default function StoreProfile() {
       <Card className="overflow-hidden">
         <div className="relative h-48 w-full bg-muted">
           <Image
-            src="https://placehold.co/1200x400.png"
+            src="/assets/images/banner_store.png"
+            priority={false}
+            loading="lazy"
             alt="Store banner"
-            layout="fill"
-            objectFit="cover"
-            className="rounded-t-lg"
+            fill
+            className="object-cover rounded-t-lg"
             data-ai-hint="store banner"
           />
         </div>
@@ -21,12 +22,12 @@ export default function StoreProfile() {
           <div className="absolute -top-16 left-6">
             <div className="relative h-32 w-32 rounded-full border-4 border-card bg-card">
               <Image
-                src="https://placehold.co/200x200.png"
-                alt="Store profile"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-full"
-                data-ai-hint="store logo"
+                src="/assets/images/profile_store.png"
+                priority={false}
+                loading="lazy"
+                alt="Terry1921 Store profile image"
+                fill
+                className="object-cover rounded-full"
               />
             </div>
           </div>
@@ -36,28 +37,27 @@ export default function StoreProfile() {
                 Terry1921 Store Front
               </h1>
               <p className="text-muted-foreground mt-2">
-                Your one-stop shop for unique and high-quality goods. We are
-                passionate about bringing you the best products with exceptional
-                service. Explore our collection and find your new favorite
-                item today!
+                En nuestra tienda encontrarás playeras, imanes y stickers únicos, 
+                diseñados con pasión y un toque divertido. 
+                ¡Exprésate con arte que se pega, se viste y se disfruta!
               </p>
             </div>
             <div className="space-y-3 text-sm">
-              <h2 className="font-semibold text-base">Contact Us</h2>
+              <h2 className="font-semibold text-base">Contáctanos</h2>
               <div className="flex items-center gap-3 text-muted-foreground">
                 <MapPin className="h-4 w-4 flex-shrink-0" />
-                <span>123 Market St, San Francisco, CA 94103</span>
+                <span>Sin dirección fisica</span>
               </div>
               <div className="flex items-center gap-3 text-muted-foreground">
                 <Phone className="h-4 w-4 flex-shrink-0" />
-                <span>(123) 456-7890</span>
+                <span>(565) 912-7473</span>
               </div>
               <div className="flex items-center gap-3 text-muted-foreground">
                 <Mail className="h-4 w-4 flex-shrink-0" />
-                <span>hello@terry1921.com</span>
+                <span>terryrockstar22@gmail.com</span>
               </div>
               <Button className="w-full mt-2" variant="outline" asChild>
-                <a href="#">Visit Our Website</a>
+                <a target="_blank" href="https://www.stickermule.com/terry1921">Visita nuestra tienda</a>
               </Button>
             </div>
           </div>

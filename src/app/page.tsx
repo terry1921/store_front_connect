@@ -9,8 +9,8 @@ export default function Home() {
       <StoreProfile />
       <Separator className="my-12" />
       <FeaturedShowcase />
-      <Separator className="my-12" />
-      <BlogList />
+      {/* <Separator className="my-12" />
+      <BlogList /> */}
     </div>
   );
 }
