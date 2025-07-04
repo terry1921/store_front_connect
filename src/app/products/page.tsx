@@ -46,6 +46,7 @@ export default async function AllProductsPage() {
                     src={product.imageUrl}
                     alt={product.title}
                     fill={true}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-contain p-2"
                     data-ai-hint={getAiHint(product.title)}
                   />
