@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -22,9 +23,10 @@ const formSchema = z.object({
   title: z
     .string()
     .min(5, { message: "Title must be at least 5 characters." }),
-  content: z
+  shortDescription: z
     .string()
-    .min(20, { message: "Content must be at least 20 characters." }),
+    .min(20, { message: "Short description must be at least 20 characters." }),
+  link: z.string().url({ message: "Please enter a valid URL for the article." }),
 });
 
 export default function BlogSubmissionForm() {
@@ -33,7 +35,8 @@ export default function BlogSubmissionForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
-      content: "",
+      shortDescription: "",
+      link: "",
     },
   });
 
@@ -56,12 +59,12 @@ export default function BlogSubmissionForm() {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Blog Title</FormLabel>
+                  <FormLabel>Title</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g., My Awesome Blog Post" {...field} />
                   </FormControl>
                   <FormDescription>
-                    This will be the main headline of your post.
+                    The title of your blog post.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -69,19 +72,35 @@ export default function BlogSubmissionForm() {
             />
             <FormField
               control={form.control}
-              name="content"
+              name="shortDescription"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Blog Content</FormLabel>
+                  <FormLabel>Short Description</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Tell us your story..."
-                      className="min-h-[200px]"
+                      placeholder="A brief summary of your article..."
+                      className="min-h-[150px]"
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    Write the body of your blog post here. Basic markdown is not supported.
+                    A short, engaging summary of the article.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="link"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Link to Article/Blog</FormLabel>
+                  <FormControl>
+                    <Input placeholder="https://example.com/blog/my-post" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    The full URL to your published blog post.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
