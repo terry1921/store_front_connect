@@ -1,10 +1,11 @@
+
 'use server';
 
 import { suggestBlogTopics } from '@/ai/flows/suggest-blog-topics';
 import { db } from '@/lib/firebase';
-import type { Product } from '@/lib/types';
+import type { Product, Article } from '@/lib/types';
 import { ArticleStatus } from '@/lib/types';
-import { doc, runTransaction, setDoc, serverTimestamp, collection, getDocs, query, orderBy, limit, type QueryConstraint, Timestamp } from 'firebase/firestore';
+import { doc, runTransaction, setDoc, serverTimestamp, collection, getDocs, query, orderBy, limit, type QueryConstraint, Timestamp, updateDoc } from 'firebase/firestore';
 
 export async function getBlogTopicSuggestions(storeFocus: string): Promise<{topics?: string[]; error?: string}> {
   try {
@@ -113,3 +114,32 @@ export async function addArticle(articleData: {
         return { success: false, error: `Failed to submit article: ${errorMessage}` };
     }
   }
+
+export async function getArticles(): Promise<Article[]> {
+    try {
+      const articlesRef = collection(db, 'articles');
+      const q = query(articlesRef, orderBy('createdAt', 'desc'));
+      const querySnapshot = await getDocs(q);
+      
+      const articles = querySnapshot.docs.map(doc => doc.data() as Article);
+      return articles;
+    } catch (e) {
+      console.error("Failed to fetch articles: ", e);
+      return [];
+    }
+}
+  
+export async function updateArticleStatus(articleId: string, status: ArticleStatus): Promise<{ success: boolean; error?: string }> {
+    try {
+      const articleRef = doc(db, 'articles', articleId);
+      await updateDoc(articleRef, {
+        status: status,
+        updatedAt: serverTimestamp(),
+      });
+      return { success: true };
+    } catch (e) {
+      console.error(e);
+      const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred.';
+      return { success: false, error: `Failed to update article status: ${errorMessage}` };
+    }
+}

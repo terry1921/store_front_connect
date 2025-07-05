@@ -82,6 +82,17 @@ export default function DashboardPage() {
                     </Button>
                 </CardFooter>
             </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Review Articles</CardTitle>
+                    <CardDescription>Accept, archive, or delete submitted articles.</CardDescription>
+                </CardHeader>
+                <CardFooter>
+                    <Button asChild>
+                        <Link href="/dashboard/articles">Review Articles</Link>
+                    </Button>
+                </CardFooter>
+            </Card>
         </div>
       ) : (
         <Card>
