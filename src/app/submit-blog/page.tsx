@@ -15,6 +15,9 @@ export default function SubmitBlogPage() {
     if (!loading && !user) {
       router.push("/login");
     }
+    if (user && user.rol !== 'admin') {
+      router.push("/dashboard");
+    }
   }, [user, loading, router]);
 
   if (loading || !user) {
