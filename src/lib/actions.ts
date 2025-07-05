@@ -1,9 +1,11 @@
+
 'use server';
 
 import { suggestBlogTopics } from '@/ai/flows/suggest-blog-topics';
 import { db } from '@/lib/firebase';
-import type { Product } from '@/lib/types';
-import { doc, runTransaction, setDoc, serverTimestamp, collection, getDocs, query, orderBy, limit, type QueryConstraint } from 'firebase/firestore';
+import type { Product, Article } from '@/lib/types';
+import { ArticleStatus } from '@/lib/types';
+import { doc, runTransaction, setDoc, serverTimestamp, collection, getDocs, query, orderBy, limit, Timestamp, updateDoc, QueryLimitConstraint, QueryOrderByConstraint } from 'firebase/firestore';
 
 export async function getBlogTopicSuggestions(storeFocus: string): Promise<{topics?: string[]; error?: string}> {
   try {
@@ -64,7 +66,7 @@ export async function getProducts(limitCount?: number): Promise<Product[]> {
     try {
         const productsRef = collection(db, 'products');
         
-        const queryConstraints: QueryConstraint[] = [orderBy('createdAt', 'desc')];
+        const queryConstraints: (QueryOrderByConstraint | QueryLimitConstraint)[] = [orderBy('createdAt', 'desc')];
         if (limitCount) {
             queryConstraints.push(limit(limitCount));
         }
@@ -81,5 +83,77 @@ export async function getProducts(limitCount?: number): Promise<Product[]> {
     } catch (e) {
         console.error("Failed to fetch products: ", e);
         return [];
+    }
+}
+
+export async function addArticle(articleData: {
+    title: string;
+    author: string;
+    date: Date;
+    shortDescription: string;
+    link: string;
+  }): Promise<{ success: boolean; error?: string }> {
+    try {
+      const articleRef = doc(collection(db, 'articles'));
+  
+      const dataToSave = {
+        ...articleData,
+        id: articleRef.id,
+        date: Timestamp.fromDate(articleData.date),
+        status: ArticleStatus.Review,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      };
+      
+      await setDoc(articleRef, dataToSave);
+  
+      return { success: true };
+    } catch (e) {
+        console.error(e);
+        const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred.';
+        return { success: false, error: `Failed to submit article: ${errorMessage}` };
+    }
+  }
+
+export async function getArticles(status?: ArticleStatus): Promise<Article[]> {
+    try {
+      const articlesRef = collection(db, 'articles');
+      const q = query(articlesRef, orderBy('createdAt', 'desc'));
+      const querySnapshot = await getDocs(q);
+      
+      const allArticles = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        const serializableData = {
+          ...data,
+          date: { seconds: data.date.seconds, nanoseconds: data.date.nanoseconds },
+          createdAt: { seconds: data.createdAt.seconds, nanoseconds: data.createdAt.nanoseconds },
+          updatedAt: { seconds: data.updatedAt.seconds, nanoseconds: data.updatedAt.nanoseconds },
+        };
+        return serializableData as Article;
+      });
+
+      if (status) {
+        return allArticles.filter(article => article.status === status);
+      }
+      
+      return allArticles;
+    } catch (e) {
+      console.error("Failed to fetch articles: ", e);
+      return [];
+    }
+}
+  
+export async function updateArticleStatus(articleId: string, status: ArticleStatus): Promise<{ success: boolean; error?: string }> {
+    try {
+      const articleRef = doc(db, 'articles', articleId);
+      await updateDoc(articleRef, {
+        status: status,
+        updatedAt: serverTimestamp(),
+      });
+      return { success: true };
+    } catch (e) {
+      console.error(e);
+      const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred.';
+      return { success: false, error: `Failed to update article status: ${errorMessage}` };
     }
 }

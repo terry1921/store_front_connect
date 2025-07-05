@@ -29,3 +29,22 @@ export interface Product {
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 }
+
+export enum ArticleStatus {
+  Review = "review",
+  Accepted = "accepted",
+  Deleted = "deleted",
+  Archived = "archived",
+}
+
+export interface Article {
+  id: string;
+  title: string;
+  shortDescription: string;
+  link: string;
+  author: string;
+  date: Timestamp;
+  status: ArticleStatus;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
