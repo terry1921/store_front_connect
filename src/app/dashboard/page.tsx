@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { Loader2, Construction } from "lucide-react";
 
 export default function DashboardPage() {
   const { user, loading, logout } = useAuth();
@@ -47,9 +47,8 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {user.rol === 'admin' && (
-          <>
+      {user.rol === 'admin' ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card>
                 <CardHeader>
                     <CardTitle>Enviar una publicación de blog</CardTitle>
@@ -83,9 +82,23 @@ export default function DashboardPage() {
                     </Button>
                 </CardFooter>
             </Card>
-          </>
-        )}
-      </div>
+        </div>
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Construction className="h-6 w-6 text-primary" />
+              <span>En Construcción</span>
+            </CardTitle>
+            <CardDescription>
+              Esta sección está actualmente en desarrollo. ¡Vuelve pronto para ver las novedades!
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground">Estamos trabajando para ofrecerte nuevas funcionalidades. ¡Agradecemos tu paciencia!</p>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
