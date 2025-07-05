@@ -4,7 +4,7 @@
 import { createContext, useEffect, useState, ReactNode } from "react";
 import {
   onAuthStateChanged,
-  User,
+  User as FirebaseUser,
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
@@ -15,8 +15,12 @@ import {
 import { auth, rtdb } from "@/lib/firebase";
 import { ref, set, get } from "firebase/database";
 
+export interface AppUser extends FirebaseUser {
+  rol?: string;
+}
+
 interface AuthContextType {
-  user: User | null;
+  user: AppUser | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (data: { email: string; password: string }) => Promise<void>;
@@ -34,25 +38,39 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 );
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setLoading(true);
+      if (firebaseUser) {
+        const userRef = ref(rtdb, `users/${firebaseUser.uid}`);
+        get(userRef).then((snapshot) => {
+          if (snapshot.exists()) {
+            const dbUser = snapshot.val();
+            setUser({ ...firebaseUser, rol: dbUser.rol });
+          } else {
+            setUser(firebaseUser);
+          }
+          setLoading(false);
+        });
+      } else {
+        setUser(null);
+        setLoading(false);
+      }
     });
     return () => unsubscribe();
   }, []);
 
-  const saveUserToDb = async (user: User, name?: string) => {
-    const userRef = ref(rtdb, `users/${user.uid}`);
+  const saveUserToDb = async (userToSave: FirebaseUser, name?: string) => {
+    const userRef = ref(rtdb, `users/${userToSave.uid}`);
     const snapshot = await get(userRef);
     if (!snapshot.exists()) {
       const now = new Date().toISOString();
       await set(userRef, {
-        name: name || user.displayName || "Anonymous",
-        email: user.email,
+        name: name || userToSave.displayName || "Anonymous",
+        email: userToSave.email,
         rol: "user",
         createdAt: now,
         updatedAt: now,

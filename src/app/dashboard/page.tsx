@@ -48,39 +48,43 @@ export default function DashboardPage() {
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card>
-            <CardHeader>
-                <CardTitle>Enviar una publicación de blog</CardTitle>
-                <CardDescription>¿Tienes una historia que compartir? Envía tu entrada de blog para que nuestro equipo la revise.</CardDescription>
-            </CardHeader>
-            <CardFooter>
-                <Button asChild>
-                    <Link href="/submit-blog">Empezar</Link>
-                </Button>
-            </CardFooter>
-        </Card>
-        <Card>
-            <CardHeader>
-                <CardTitle>Obtenga sugerencias de temas</CardTitle>
-                <CardDescription>¿Necesitas inspiración? Usa nuestra herramienta de IA para generar ideas creativas para tu blog.</CardDescription>
-            </CardHeader>
-            <CardFooter>
-                <Button asChild>
-                    <Link href="/topic-suggestion">Generar Ideas</Link>
-                </Button>
-            </CardFooter>
-        </Card>
-         <Card>
-            <CardHeader>
-                <CardTitle>Subir un producto</CardTitle>
-                <CardDescription>Añade nuevos productos al listado de tu tienda.</CardDescription>
-            </CardHeader>
-            <CardFooter>
-                <Button asChild>
-                    <Link href="/dashboard/products">Subir Producto</Link>
-                </Button>
-            </CardFooter>
-        </Card>
+        {user.rol === 'admin' && (
+          <>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Enviar una publicación de blog</CardTitle>
+                    <CardDescription>¿Tienes una historia que compartir? Envía tu entrada de blog para que nuestro equipo la revise.</CardDescription>
+                </CardHeader>
+                <CardFooter>
+                    <Button asChild>
+                        <Link href="/submit-blog">Empezar</Link>
+                    </Button>
+                </CardFooter>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Obtenga sugerencias de temas</CardTitle>
+                    <CardDescription>¿Necesitas inspiración? Usa nuestra herramienta de IA para generar ideas creativas para tu blog.</CardDescription>
+                </CardHeader>
+                <CardFooter>
+                    <Button asChild>
+                        <Link href="/topic-suggestion">Generar Ideas</Link>
+                    </Button>
+                </CardFooter>
+            </Card>
+             <Card>
+                <CardHeader>
+                    <CardTitle>Subir un producto</CardTitle>
+                    <CardDescription>Añade nuevos productos al listado de tu tienda.</CardDescription>
+                </CardHeader>
+                <CardFooter>
+                    <Button asChild>
+                        <Link href="/dashboard/products">Subir Producto</Link>
+                    </Button>
+                </CardFooter>
+            </Card>
+          </>
+        )}
       </div>
     </div>
   );
