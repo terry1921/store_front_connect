@@ -66,7 +66,16 @@ export default function ArticlesTable({ initialArticles, onUpdate }: ArticlesTab
   
   const formatDate = (date: Timestamp) => {
     if (!date) return 'N/A';
-    return date.toDate().toLocaleDateString();
+    // When Timestamp is serialized from server to client, it becomes a plain object.
+    if (typeof date.toDate === 'function') {
+      return date.toDate().toLocaleDateString();
+    }
+    // Handle the serialized object case
+    const dateAsAny = date as any;
+    if (dateAsAny.seconds) {
+      return new Date(dateAsAny.seconds * 1000).toLocaleDateString();
+    }
+    return 'Invalid Date';
   }
 
   if (initialArticles.length === 0) {
