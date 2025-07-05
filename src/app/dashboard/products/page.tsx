@@ -14,6 +14,11 @@ export default function UploadProductPage() {
   useEffect(() => {
     if (!loading && !user) {
       router.push("/login");
+      return;
+    }
+    if (user && user.rol !== 'admin') {
+      router.push("/dashboard");
+      return;
     }
   }, [user, loading, router]);
 

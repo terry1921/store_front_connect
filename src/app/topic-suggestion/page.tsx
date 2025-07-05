@@ -15,6 +15,10 @@ export default function TopicSuggestionPage() {
     if (!loading && !user) {
       router.push("/login");
     }
+    if (user && user.rol !== 'admin') {
+      router.push("/dashboard");
+      return;
+    }
   }, [user, loading, router]);
 
   if (loading || !user) {
