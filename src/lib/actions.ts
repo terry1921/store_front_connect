@@ -121,7 +121,21 @@ export async function getArticles(): Promise<Article[]> {
       const q = query(articlesRef, orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
       
-      const articles = querySnapshot.docs.map(doc => doc.data() as Article);
+      const articles = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        // Firestore Timestamps are complex objects with methods (like toJSON)
+        // that cannot be passed from Server Components to Client Components.
+        // We manually convert them to simple, serializable objects.
+        const serializableData = {
+          ...data,
+          date: { seconds: data.date.seconds, nanoseconds: data.date.nanoseconds },
+          createdAt: { seconds: data.createdAt.seconds, nanoseconds: data.createdAt.nanoseconds },
+          updatedAt: { seconds: data.updatedAt.seconds, nanoseconds: data.updatedAt.nanoseconds },
+        };
+        // We cast here to satisfy TypeScript, the client component is already
+        // equipped to handle this plain object structure.
+        return serializableData as Article;
+      });
       return articles;
     } catch (e) {
       console.error("Failed to fetch articles: ", e);
