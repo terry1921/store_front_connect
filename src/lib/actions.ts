@@ -3,7 +3,8 @@
 import { suggestBlogTopics } from '@/ai/flows/suggest-blog-topics';
 import { db } from '@/lib/firebase';
 import type { Product } from '@/lib/types';
-import { doc, runTransaction, setDoc, serverTimestamp, collection, getDocs, query, orderBy, limit, type QueryConstraint } from 'firebase/firestore';
+import { ArticleStatus } from '@/lib/types';
+import { doc, runTransaction, setDoc, serverTimestamp, collection, getDocs, query, orderBy, limit, type QueryConstraint, Timestamp } from 'firebase/firestore';
 
 export async function getBlogTopicSuggestions(storeFocus: string): Promise<{topics?: string[]; error?: string}> {
   try {
@@ -83,3 +84,32 @@ export async function getProducts(limitCount?: number): Promise<Product[]> {
         return [];
     }
 }
+
+export async function addArticle(articleData: {
+    title: string;
+    author: string;
+    date: Date;
+    shortDescription: string;
+    link: string;
+  }): Promise<{ success: boolean; error?: string }> {
+    try {
+      const articleRef = doc(collection(db, 'articles'));
+  
+      const dataToSave = {
+        ...articleData,
+        id: articleRef.id,
+        date: Timestamp.fromDate(articleData.date),
+        status: ArticleStatus.Review,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      };
+      
+      await setDoc(articleRef, dataToSave);
+  
+      return { success: true };
+    } catch (e) {
+        console.error(e);
+        const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred.';
+        return { success: false, error: `Failed to submit article: ${errorMessage}` };
+    }
+  }

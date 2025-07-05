@@ -1,11 +1,12 @@
 
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ import {
 } from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
+import { addArticle } from "@/lib/actions";
 
 const formSchema = z.object({
   title: z
@@ -47,6 +49,7 @@ const formSchema = z.object({
 
 export default function BlogSubmissionForm() {
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -57,13 +60,24 @@ export default function BlogSubmissionForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    toast({
-      title: "Submission Successful!",
-      description: "Your blog post has been sent for review.",
-    });
-    form.reset();
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    const result = await addArticle(values);
+    setIsLoading(false);
+
+    if (result.success) {
+      toast({
+        title: "Submission Successful!",
+        description: "Your blog post has been sent for review.",
+      });
+      form.reset();
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Submission Failed",
+        description: result.error || "An unexpected error occurred.",
+      });
+    }
   }
 
   return (
@@ -183,8 +197,12 @@ export default function BlogSubmissionForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" style={{ backgroundColor: 'hsl(var(--accent))', color: 'hsl(var(--accent-foreground))' }}>
-              Submit for Review
+            <Button type="submit" className="w-full" style={{ backgroundColor: 'hsl(var(--accent))', color: 'hsl(var(--accent-foreground))' }} disabled={isLoading}>
+              {isLoading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                "Submit for Review"
+              )}
             </Button>
           </form>
         </Form>
