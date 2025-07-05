@@ -5,7 +5,7 @@ import { suggestBlogTopics } from '@/ai/flows/suggest-blog-topics';
 import { db } from '@/lib/firebase';
 import type { Product, Article } from '@/lib/types';
 import { ArticleStatus } from '@/lib/types';
-import { doc, runTransaction, setDoc, serverTimestamp, collection, getDocs, query, orderBy, limit, type QueryConstraint, Timestamp, updateDoc } from 'firebase/firestore';
+import { doc, runTransaction, setDoc, serverTimestamp, collection, getDocs, query, orderBy, limit, type QueryConstraint, Timestamp, updateDoc, where } from 'firebase/firestore';
 
 export async function getBlogTopicSuggestions(storeFocus: string): Promise<{topics?: string[]; error?: string}> {
   try {
@@ -115,10 +115,14 @@ export async function addArticle(articleData: {
     }
   }
 
-export async function getArticles(): Promise<Article[]> {
+export async function getArticles(status?: ArticleStatus): Promise<Article[]> {
     try {
       const articlesRef = collection(db, 'articles');
-      const q = query(articlesRef, orderBy('createdAt', 'desc'));
+      const queryConstraints: QueryConstraint[] = [orderBy('createdAt', 'desc')];
+      if (status) {
+          queryConstraints.push(where('status', '==', status));
+      }
+      const q = query(articlesRef, ...queryConstraints);
       const querySnapshot = await getDocs(q);
       
       const articles = querySnapshot.docs.map(doc => {
