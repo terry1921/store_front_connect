@@ -24,11 +24,11 @@ export default async function BlogList() {
         id="blog-list-heading"
         className="text-3xl font-bold text-center font-headline"
       >
-        From Our Blog
+        De nuestro blog
       </h2>
       <p className="mt-2 text-center text-muted-foreground max-w-2xl mx-auto">
-        Insights, stories, and tips from our team. Get the latest news and
-        updates from behind the scenes.
+        Perspectivas, historias y consejos de nuestro equipo. 
+        Entérate de las últimas noticias y actualizaciones tras bambalinas.
       </p>
       {articles.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
@@ -37,7 +37,7 @@ export default async function BlogList() {
               <CardHeader>
                 <CardTitle>{article.title}</CardTitle>
                 <CardDescription>
-                  By {article.author} on {formatDate(article.date)}
+                  Por {article.author} el {formatDate(article.date)}
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex-grow">
@@ -50,7 +50,7 @@ export default async function BlogList() {
                   rel="noopener noreferrer"
                   className="font-semibold text-primary hover:underline"
                 >
-                  Read More &rarr;
+                  Leer más &rarr;
                 </a>
               </CardFooter>
             </Card>
@@ -58,9 +58,9 @@ export default async function BlogList() {
         </div>
       ) : (
         <div className="text-center py-16">
-          <h3 className="text-xl font-semibold">No Blog Posts Yet</h3>
+          <h3 className="text-xl font-semibold">Aún no hay publicaciones de blog</h3>
           <p className="mt-2 text-muted-foreground">
-            There are no articles to display at the moment. Please check back soon!
+            No hay artículos para mostrar en este momento. ¡Vuelva pronto!
           </p>
         </div>
       )}

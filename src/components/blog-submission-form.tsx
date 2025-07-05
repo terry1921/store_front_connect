@@ -34,17 +34,17 @@ import { addArticle } from "@/lib/actions";
 const formSchema = z.object({
   title: z
     .string()
-    .min(5, { message: "Title must be at least 5 characters." }),
+    .min(5, { message: "El título debe tener al menos 5 caracteres." }),
   author: z
     .string()
-    .min(2, { message: "Author name must be at least 2 characters." }),
+    .min(2, { message: "El nombre del autor debe tener al menos 2 caracteres." }),
   date: z.date({
-    required_error: "A date is required.",
+    required_error: "Se requiere una fecha.",
   }),
   shortDescription: z
     .string()
-    .min(20, { message: "Short description must be at least 20 characters." }),
-  link: z.string().url({ message: "Please enter a valid URL for the article." }),
+    .min(20, { message: "La descripción breve debe tener al menos 20 caracteres." }),
+  link: z.string().url({ message: "Introduzca una URL válida para el artículo." }),
 });
 
 export default function BlogSubmissionForm() {
@@ -67,15 +67,15 @@ export default function BlogSubmissionForm() {
 
     if (result.success) {
       toast({
-        title: "Submission Successful!",
-        description: "Your blog post has been sent for review.",
+        title: "¡Envío exitoso!",
+        description: "Su publicación de blog ha sido enviada para revisión.",
       });
       form.reset();
     } else {
       toast({
         variant: "destructive",
-        title: "Submission Failed",
-        description: result.error || "An unexpected error occurred.",
+        title: "Envío fallido",
+        description: result.error || "Se produjo un error inesperado.",
       });
     }
   }
@@ -90,12 +90,12 @@ export default function BlogSubmissionForm() {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel>Título</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g., My Awesome Blog Post" {...field} />
                   </FormControl>
                   <FormDescription>
-                    The title of your blog post.
+                    El título de la entrada de tu blog.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -106,12 +106,12 @@ export default function BlogSubmissionForm() {
               name="author"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Author</FormLabel>
+                  <FormLabel>Autor/a</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g., Jane Doe" {...field} />
                   </FormControl>
                   <FormDescription>
-                    The author of the blog post.
+                    El autor de la entrada de tu blog.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -122,7 +122,7 @@ export default function BlogSubmissionForm() {
               name="date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Date</FormLabel>
+                  <FormLabel>Fecha</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -137,7 +137,7 @@ export default function BlogSubmissionForm() {
                           {field.value ? (
                             format(field.value, "PPP")
                           ) : (
-                            <span>Pick a date</span>
+                            <span>Elige una fecha</span>
                           )}
                         </Button>
                       </FormControl>
@@ -155,7 +155,7 @@ export default function BlogSubmissionForm() {
                     </PopoverContent>
                   </Popover>
                   <FormDescription>
-                    The publication date of the blog post.
+                    La fecha en la que se publicó el blog.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -166,7 +166,7 @@ export default function BlogSubmissionForm() {
               name="shortDescription"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Short Description</FormLabel>
+                  <FormLabel>Descripción corta</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="A brief summary of your article..."
@@ -175,7 +175,7 @@ export default function BlogSubmissionForm() {
                     />
                   </FormControl>
                   <FormDescription>
-                    A short, engaging summary of the article.
+                    Un resumen breve y atractivo del artículo
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -186,12 +186,12 @@ export default function BlogSubmissionForm() {
               name="link"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Link to Article/Blog</FormLabel>
+                  <FormLabel>Enlace al artículo/blog</FormLabel>
                   <FormControl>
                     <Input placeholder="https://example.com/blog/my-post" {...field} />
                   </FormControl>
                   <FormDescription>
-                    The full URL to your published blog post.
+                    La URL completa de la entrada del blog publicada.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -201,7 +201,7 @@ export default function BlogSubmissionForm() {
               {isLoading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (
-                "Submit for Review"
+                "Enviar para revisión"
               )}
             </Button>
           </form>

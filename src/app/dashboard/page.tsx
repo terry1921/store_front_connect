@@ -35,7 +35,7 @@ export default function DashboardPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Dashboard</h1>
-        <Button onClick={logout} variant="outline">Logout</Button>
+        <Button onClick={logout} variant="outline">Cerrar Sesión</Button>
       </div>
       <Card className="mb-8">
         <CardHeader>
@@ -84,12 +84,12 @@ export default function DashboardPage() {
             </Card>
             <Card>
                 <CardHeader>
-                    <CardTitle>Review Articles</CardTitle>
-                    <CardDescription>Accept, archive, or delete submitted articles.</CardDescription>
+                    <CardTitle>Artículos de revisión</CardTitle>
+                    <CardDescription>Aceptar, archivar o eliminar los artículos enviados.</CardDescription>
                 </CardHeader>
                 <CardFooter>
                     <Button asChild>
-                        <Link href="/dashboard/articles">Review Articles</Link>
+                        <Link href="/dashboard/articles">Revisar Artículos</Link>
                     </Button>
                 </CardFooter>
             </Card>
