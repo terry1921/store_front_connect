@@ -5,7 +5,7 @@ import { suggestBlogTopics } from '@/ai/flows/suggest-blog-topics';
 import { db } from '@/lib/firebase';
 import type { Product, Article } from '@/lib/types';
 import { ArticleStatus } from '@/lib/types';
-import { doc, runTransaction, setDoc, serverTimestamp, collection, getDocs, query, orderBy, limit, Timestamp, updateDoc, where, QueryLimitConstraint, QueryOrderByConstraint } from 'firebase/firestore';
+import { doc, runTransaction, setDoc, serverTimestamp, collection, getDocs, query, orderBy, limit, Timestamp, updateDoc, QueryLimitConstraint, QueryOrderByConstraint } from 'firebase/firestore';
 
 export async function getBlogTopicSuggestions(storeFocus: string): Promise<{topics?: string[]; error?: string}> {
   try {
