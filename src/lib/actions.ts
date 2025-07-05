@@ -5,7 +5,7 @@ import { suggestBlogTopics } from '@/ai/flows/suggest-blog-topics';
 import { db } from '@/lib/firebase';
 import type { Product, Article } from '@/lib/types';
 import { ArticleStatus } from '@/lib/types';
-import { doc, runTransaction, setDoc, serverTimestamp, collection, getDocs, query, orderBy, limit, type QueryConstraint, Timestamp, updateDoc, where } from 'firebase/firestore';
+import { doc, runTransaction, setDoc, serverTimestamp, collection, getDocs, query, orderBy, limit, Timestamp, updateDoc, where, QueryLimitConstraint, QueryOrderByConstraint } from 'firebase/firestore';
 
 export async function getBlogTopicSuggestions(storeFocus: string): Promise<{topics?: string[]; error?: string}> {
   try {
@@ -66,7 +66,7 @@ export async function getProducts(limitCount?: number): Promise<Product[]> {
     try {
         const productsRef = collection(db, 'products');
         
-        const queryConstraints: QueryConstraint[] = [orderBy('createdAt', 'desc')];
+        const queryConstraints: (QueryOrderByConstraint | QueryLimitConstraint)[] = [orderBy('createdAt', 'desc')];
         if (limitCount) {
             queryConstraints.push(limit(limitCount));
         }
@@ -118,29 +118,25 @@ export async function addArticle(articleData: {
 export async function getArticles(status?: ArticleStatus): Promise<Article[]> {
     try {
       const articlesRef = collection(db, 'articles');
-      const queryConstraints: QueryConstraint[] = [orderBy('createdAt', 'desc')];
-      if (status) {
-          queryConstraints.push(where('status', '==', status));
-      }
-      const q = query(articlesRef, ...queryConstraints);
+      const q = query(articlesRef, orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
       
-      const articles = querySnapshot.docs.map(doc => {
+      const allArticles = querySnapshot.docs.map(doc => {
         const data = doc.data();
-        // Firestore Timestamps are complex objects with methods (like toJSON)
-        // that cannot be passed from Server Components to Client Components.
-        // We manually convert them to simple, serializable objects.
         const serializableData = {
           ...data,
           date: { seconds: data.date.seconds, nanoseconds: data.date.nanoseconds },
           createdAt: { seconds: data.createdAt.seconds, nanoseconds: data.createdAt.nanoseconds },
           updatedAt: { seconds: data.updatedAt.seconds, nanoseconds: data.updatedAt.nanoseconds },
         };
-        // We cast here to satisfy TypeScript, the client component is already
-        // equipped to handle this plain object structure.
         return serializableData as Article;
       });
-      return articles;
+
+      if (status) {
+        return allArticles.filter(article => article.status === status);
+      }
+      
+      return allArticles;
     } catch (e) {
       console.error("Failed to fetch articles: ", e);
       return [];
